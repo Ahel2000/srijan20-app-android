@@ -2,7 +2,8 @@
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
 	android:id="@+id/ll_event"
 	android:layout_width="wrap_content"
-	android:layout_height="90dp">
+	android:layout_height="90dp"
+	android:background="@color/colorPrimaryDark">
 
 	<ImageView
 		android:id="@+id/iv_event_icon_back"

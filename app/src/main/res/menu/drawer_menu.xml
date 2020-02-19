@@ -3,9 +3,6 @@
 
 	<group android:checkableBehavior="single">
 		<item
-			android:id="@+id/profile"
-			android:title="@string/profile"/>
-		<item
 			android:id="@+id/events"
 			android:title="@string/main_page_events" />
 		<item
