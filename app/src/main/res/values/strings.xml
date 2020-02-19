@@ -72,5 +72,6 @@
 	<string name="looking_for_workshops">Looking for workshops and other events?\nClick here
 		to register</string>
 	<string name="registered_events">Registered events</string>
+	<string name="apply">Apply</string>
 
 </resources>
