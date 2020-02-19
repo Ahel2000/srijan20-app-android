@@ -58,7 +58,9 @@
 	<string name="events">Events</string>
 	<string name="sponsors">Sponsors</string>
 	<string name="sponsor_poster">Sponsor poster</string>
-	<string name="to_sponsor_contact_us_at_srijan_jduniv_gmail_com_or_soumyadip_maity_9333324765">To sponsor, contact us at srijan.jduniv@gmail.com or Soumyadip Maity(9333324765)</string>
+	<string
+		name="to_sponsor_contact_us_at_srijan_jduniv_gmail_com_or_soumyadip_maity_9333324765">To
+		sponsor, email us at srijan.jduniv@gmail.com or contact Soumyadip Maity(9333324765)</string>
 	<string name="coming_soon">Coming soon</string>
 	<string name="scan_to_register">Scan to register</string>
 
