@@ -4,13 +4,13 @@
 	xmlns:tools="http://schemas.android.com/tools"
 	android:layout_width="match_parent"
 	android:layout_height="match_parent"
-	tools:context=".view.Events">
+	tools:context=".view.About">
 
 	<androidx.cardview.widget.CardView
 		android:layout_width="match_parent"
 		android:layout_height="wrap_content">
 
-		<RelativeLayout
+		<LinearLayout
 			android:layout_width="match_parent"
 			android:layout_height="wrap_content"
 			android:orientation="vertical">
@@ -28,7 +28,6 @@
 				android:id="@+id/clubsInfo"
 				android:layout_width="match_parent"
 				android:layout_height="wrap_content"
-				android:layout_below="@+id/srijanText"
 				android:layout_margin="8dp"
 				android:gravity="center">
 
@@ -68,6 +67,6 @@
 					android:contentDescription="@string/ju_science_club_logo"
 					android:src="@drawable/jusc_logo" />
 			</LinearLayout>
-		</RelativeLayout>
+		</LinearLayout>
 	</androidx.cardview.widget.CardView>
 </ScrollView>

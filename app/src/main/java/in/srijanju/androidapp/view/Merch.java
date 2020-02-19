@@ -1,6 +1,7 @@
 package in.srijanju.androidapp.view;
 
 import android.content.Intent;
+import android.net.Uri;
 import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -51,9 +52,8 @@ public class Merch extends Fragment {
 	view.findViewById(R.id.btn_buy_merch).setOnClickListener(new View.OnClickListener() {
 	  @Override
 	  public void onClick(View v) {
-		Intent myIntent = new Intent(activity, webview.class);
-		myIntent.putExtra("url", "https://www.srijanju.in/app/merchandise");
-		startActivity(myIntent);
+		Intent browserIntent = new Intent(Intent.ACTION_VIEW, Uri.parse("https://www.srijanju.in/app/merchandise"));
+		startActivity(browserIntent);
 	  }
 	});
   }
