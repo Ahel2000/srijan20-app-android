@@ -73,5 +73,6 @@
 		to register</string>
 	<string name="registered_events">Registered events</string>
 	<string name="apply">Apply</string>
+	<string name="no_registration_yet">No registration yet</string>
 
 </resources>
