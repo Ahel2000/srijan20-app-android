@@ -1,111 +1,42 @@
 <?xml version="1.0" encoding="utf-8"?>
-<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
-	xmlns:app="http://schemas.android.com/apk/res-auto"
-	xmlns:tools="http://schemas.android.com/tools"
+<ScrollView xmlns:android="http://schemas.android.com/apk/res/android"
 	android:layout_width="match_parent"
 	android:layout_height="match_parent"
-	android:background="@drawable/mp_background"
-	tools:context=".view.Events">
+	android:fillViewport="true"
+	android:scrollbars="vertical">
 
-	<ImageView
-		android:layout_width="wrap_content"
+	<LinearLayout
+		android:layout_width="match_parent"
 		android:layout_height="wrap_content"
-		android:adjustViewBounds="true"
-		android:contentDescription="@string/srijan_circles"
-		android:scaleX="1.2"
-		android:scaleY="1.2"
-		android:src="@drawable/mp_circles_center"
-		app:layout_constraintBottom_toBottomOf="parent"
-		app:layout_constraintLeft_toLeftOf="parent"
-		app:layout_constraintRight_toRightOf="parent"
-		app:layout_constraintTop_toTopOf="parent" />
+		android:orientation="vertical"
+		android:paddingBottom="16dp">
 
-	<ImageView
-		android:layout_width="wrap_content"
-		android:layout_height="wrap_content"
-		android:contentDescription="@string/event_black_overlay"
-		android:scaleY="1.2"
-		android:scaleX="1.3"
-		android:src="@drawable/event_black_overlay"
-		app:layout_constraintBottom_toBottomOf="parent"
-		app:layout_constraintLeft_toLeftOf="parent"
-		app:layout_constraintRight_toRightOf="parent"
-		app:layout_constraintTop_toTopOf="parent" />
-
-	<androidx.constraintlayout.widget.Guideline
-		android:id="@+id/guideline3"
-		android:layout_width="wrap_content"
-		android:layout_height="wrap_content"
-		android:orientation="horizontal"
-		app:layout_constraintGuide_percent="1" />
-
-	<androidx.core.widget.NestedScrollView
-		android:layout_width="0dp"
-		android:layout_height="0dp"
-		android:fillViewport="true"
-		android:scrollbars="vertical"
-		app:layout_constraintBottom_toBottomOf="@+id/guideline3"
-		app:layout_constraintLeft_toLeftOf="parent"
-		app:layout_constraintRight_toRightOf="parent"
-		app:layout_constraintTop_toTopOf="parent">
-
-		<RelativeLayout
+		<ImageView
+			android:id="@+id/ambassador_pic"
 			android:layout_width="match_parent"
-			android:layout_height="match_parent">
+			android:layout_height="wrap_content"
+			android:adjustViewBounds="true"
+			android:contentDescription="@string/campus_ambassador_poster"
+			android:src="@drawable/poster_ca" />
 
-			<ImageView
-				android:id="@+id/ambassador_pic"
-				android:layout_width="match_parent"
-				android:layout_height="wrap_content"
-				android:layout_centerHorizontal="true"
-				android:adjustViewBounds="true"
-				android:contentDescription="@string/campus_ambassador_poster"
-				android:src="@drawable/poster_ca" />
+		<TextView
+			android:id="@+id/CA_text"
+			android:layout_width="match_parent"
+			android:layout_height="wrap_content"
+			android:layout_marginStart="10dp"
+			android:gravity="start"
+			android:padding="8dp"
+			android:textColor="@android:color/black"
+			android:textSize="16sp" />
 
-			<TextView
-				android:id="@+id/ca_heading"
-				android:layout_width="wrap_content"
-				android:layout_height="wrap_content"
-				android:layout_below="@id/ambassador_pic"
-				android:layout_margin="8dp"
-				android:gravity="center"
-				android:fontFamily="sans-serif-thin"
-				android:shadowColor="#f99245"
-				android:shadowDx="-4"
-				android:shadowDy="-4"
-				android:shadowRadius="1"
-				android:text="@string/campus_ambassador"
-				android:textColor="@color/cardview_light_background"
-				android:textSize="40sp" />
-
-			<TextView
-				android:id="@+id/CA_text"
-				android:layout_width="match_parent"
-				android:layout_height="wrap_content"
-				android:layout_below="@+id/ca_heading"
-				android:layout_marginStart="10dp"
-				android:padding="8dp"
-				android:scaleX="1"
-				android:scaleY="1"
-				android:textColor="#ffffff"
-				android:textSize="20sp"
-				android:shadowDx="-2"
-				android:shadowDy="-2"
-				android:letterSpacing="0.03"
-				android:shadowColor="#f99245"
-				android:shadowRadius="1" />
-
-			<Button
-				android:id="@+id/CA_button"
-				android:layout_width="wrap_content"
-				android:layout_height="wrap_content"
-				android:layout_below="@+id/CA_text"
-				android:layout_centerInParent="true"
-				android:text="Apply NOW!" />
-
-		</RelativeLayout>
-
-	</androidx.core.widget.NestedScrollView>
-
-
-</androidx.constraintlayout.widget.ConstraintLayout>
+		<Button
+			android:id="@+id/CA_button"
+			android:layout_width="wrap_content"
+			android:layout_height="wrap_content"
+			android:layout_gravity="center_horizontal"
+			android:background="@color/colorPrimaryDark"
+			android:text="@string/apply"
+			android:textAllCaps="true"
+			android:textColor="@android:color/white" />
+	</LinearLayout>
+</ScrollView>

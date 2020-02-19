@@ -12,6 +12,7 @@ import android.widget.Toast;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
+import androidx.fragment.app.FragmentActivity;
 
 import com.firebase.ui.auth.AuthUI;
 import com.google.firebase.auth.FirebaseAuth;
@@ -36,13 +37,19 @@ public class About extends Fragment {
   public void onActivityCreated(Bundle savedInstanceState) {
 	super.onActivityCreated(savedInstanceState);
 
+	final FragmentActivity activity = getActivity();
+	View view = getView();
+	if (activity == null || view == null) {
+	  Toast.makeText(getContext(), "Some error occurred", Toast.LENGTH_SHORT).show();
+	  return;
+	}
 
 	FirebaseUser user = FirebaseAuth.getInstance().getCurrentUser();
 	if (user == null) {
-	  Toast.makeText(getActivity(), "Not logged in", Toast.LENGTH_SHORT).show();
+	  Toast.makeText(activity, "Not logged in", Toast.LENGTH_SHORT).show();
 	  FirebaseAuth.getInstance().signOut();
-	  AuthUI.getInstance().signOut(getActivity().getApplicationContext());
-	  Intent intent = new Intent(getActivity(), MainActivity.class);
+	  AuthUI.getInstance().signOut(activity.getApplicationContext());
+	  Intent intent = new Intent(activity, MainActivity.class);
 	  intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP | Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
 	  startActivity(intent);
 	  return;
@@ -57,7 +64,7 @@ public class About extends Fragment {
 	img1.setOnClickListener(new View.OnClickListener() {
 	  public void onClick(View v) {
 
-		Intent myIntent = new Intent(getActivity(), webview.class);
+		Intent myIntent = new Intent(activity, webview.class);
 		myIntent.putExtra("url", "http://www.jaduniv.edu.in");
 		startActivity(myIntent);
 	  }
@@ -65,7 +72,7 @@ public class About extends Fragment {
 	ImageView img2 = getView().findViewById(R.id.GS_official);
 	img2.setOnClickListener(new View.OnClickListener() {
 	  public void onClick(View v) {
-		Intent myIntent = new Intent(getActivity(), webview.class);
+		Intent myIntent = new Intent(activity, webview.class);
 		myIntent.putExtra("url", "https://www.facebook.com/GamesSocietyJU/");
 		startActivity(myIntent);
 	  }
@@ -73,7 +80,7 @@ public class About extends Fragment {
 	ImageView img3 = getView().findViewById(R.id.CC_official);
 	img3.setOnClickListener(new View.OnClickListener() {
 	  public void onClick(View v) {
-		Intent myIntent = new Intent(getActivity(), webview.class);
+		Intent myIntent = new Intent(activity, webview.class);
 		myIntent.putExtra("url", "https://www.facebook.com/JUCodeClub/");
 		startActivity(myIntent);
 	  }
@@ -81,16 +88,10 @@ public class About extends Fragment {
 	ImageView img4 = getView().findViewById(R.id.SC_official);
 	img4.setOnClickListener(new View.OnClickListener() {
 	  public void onClick(View v) {
-		Intent myIntent = new Intent(getActivity(), webview.class);
+		Intent myIntent = new Intent(activity, webview.class);
 		myIntent.putExtra("url", "https://www.facebook.com/juscofficial/");
 		startActivity(myIntent);
 	  }
 	});
-  }
-
-
-  @Override
-  public void onDestroy() {
-	super.onDestroy();
   }
 }

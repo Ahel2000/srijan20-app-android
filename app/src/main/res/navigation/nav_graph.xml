@@ -35,4 +35,9 @@
 		android:name="in.srijanju.androidapp.view.Sponsors"
 		android:label="Sponsors"
 		tools:layout="@layout/activity_sponsors" />
+	<fragment
+		android:id="@+id/merchFrag"
+		android:name="in.srijanju.androidapp.view.Merch"
+		android:label="Merchandise"
+		tools:layout="@layout/activity_merch" />
 </navigation>

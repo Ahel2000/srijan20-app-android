@@ -1,11 +1,15 @@
 package in.srijanju.androidapp.view;
 
 import android.content.Intent;
+import android.graphics.drawable.Drawable;
 import android.os.Bundle;
 import android.view.MenuItem;
+import android.view.View;
+import android.widget.TextView;
 import android.widget.Toast;
 
 import androidx.annotation.NonNull;
+import androidx.annotation.Nullable;
 import androidx.appcompat.widget.Toolbar;
 import androidx.core.view.GravityCompat;
 import androidx.drawerlayout.widget.DrawerLayout;
@@ -13,13 +17,21 @@ import androidx.navigation.NavController;
 import androidx.navigation.Navigation;
 import androidx.navigation.ui.NavigationUI;
 
+import com.bumptech.glide.Glide;
+import com.bumptech.glide.request.target.CustomTarget;
+import com.bumptech.glide.request.transition.Transition;
 import com.firebase.ui.auth.AuthUI;
 import com.google.android.material.navigation.NavigationView;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
+import com.google.firebase.database.DataSnapshot;
+import com.google.firebase.database.DatabaseError;
+import com.google.firebase.database.FirebaseDatabase;
+import com.google.firebase.database.ValueEventListener;
 
 import in.srijanju.androidapp.R;
 import in.srijanju.androidapp.SrijanActivity;
+import in.srijanju.androidapp.model.User;
 
 public class MainPage extends SrijanActivity implements
 		NavigationView.OnNavigationItemSelectedListener {
@@ -29,13 +41,14 @@ public class MainPage extends SrijanActivity implements
   public DrawerLayout drawerLayout;
   public NavController navController;
   public NavigationView navigationView;
+  private FirebaseUser user;
 
   @Override
   protected void onCreate(Bundle savedInstanceState) {
 	super.onCreate(savedInstanceState);
 	setContentView(R.layout.activity_main_page);
 
-	FirebaseUser user = FirebaseAuth.getInstance().getCurrentUser();
+	user = FirebaseAuth.getInstance().getCurrentUser();
 	if (user == null) {
 	  Toast.makeText(this, "Not logged in", Toast.LENGTH_SHORT).show();
 	  FirebaseAuth.getInstance().signOut();
@@ -55,6 +68,7 @@ public class MainPage extends SrijanActivity implements
 	setSupportActionBar(toolbar);
 
 	drawerLayout = findViewById(R.id.drawer_layout);
+	drawerLayout.setDrawerLockMode(DrawerLayout.LOCK_MODE_LOCKED_CLOSED);
 
 	navigationView = findViewById(R.id.navigationView);
 
@@ -66,6 +80,41 @@ public class MainPage extends SrijanActivity implements
 
 	navigationView.setNavigationItemSelectedListener(this);
 
+	final View headerView = navigationView.getHeaderView(0);
+	Glide.with(MainPage.this).asDrawable().load("https://www.itl.cat/pngfile/big/212-2125475_dark-blue-material-design.jpg").into(new CustomTarget<Drawable>() {
+	  @Override
+	  public void onResourceReady(@NonNull Drawable resource, @Nullable Transition<? super Drawable> transition) {
+		headerView.setBackground(resource);
+	  }
+
+	  @Override
+	  public void onLoadCleared(@Nullable Drawable placeholder) {
+
+	  }
+	});
+	FirebaseDatabase.getInstance().getReference("srijan/profile/" + user.getUid() +
+			"/parentprofile").addListenerForSingleValueEvent(new ValueEventListener() {
+	  @Override
+	  public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
+		User cUser = null;
+		try {
+		  cUser = dataSnapshot.getValue(User.class);
+		} catch (Exception ignored) {
+		}
+		String name = "null", email = "null";
+		if (cUser != null) {
+		  name = cUser.name;
+		  email = cUser.email;
+		}
+		((TextView) headerView.findViewById(R.id.tv_name)).setText(name);
+		((TextView) headerView.findViewById(R.id.tv_email)).setText(email);
+	  }
+
+	  @Override
+	  public void onCancelled(@NonNull DatabaseError databaseError) {
+
+	  }
+	});
   }
 
   @Override
@@ -93,10 +142,6 @@ public class MainPage extends SrijanActivity implements
 
 	switch (id) {
 
-	  case R.id.profile:
-		navController.navigate(R.id.profileFrag);
-		break;
-
 	  case R.id.about:
 		navController.navigate(R.id.aboutFrag);
 		break;
@@ -116,6 +161,9 @@ public class MainPage extends SrijanActivity implements
 		navController.navigate(R.id.sponsorsFrag);
 		break;
 
+	  case R.id.merch:
+		navController.navigate(R.id.merchFrag);
+		break;
 	}
 	return true;
 

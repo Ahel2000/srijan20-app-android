@@ -120,7 +120,7 @@ public class Profile extends Fragment {
 	  public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
 		User user = dataSnapshot.getValue(User.class);
 		if (user == null) {
-		  Toast.makeText(getActivity(), "Something weird happened! :(", Toast.LENGTH_SHORT).show();
+		  Toast.makeText(activity, "Something weird happened! :(", Toast.LENGTH_SHORT).show();
 		  return;
 		}
 		tvName.setText(user.name);
@@ -139,13 +139,14 @@ public class Profile extends Fragment {
 	FirebaseDatabase db = FirebaseDatabase.getInstance();
 	ref = db.getReference("srijan/profile/" + user.getUid() + "/events");
 	GridView gridView = getView().findViewById(R.id.gv_events);
+	gridView.setEmptyView(view.findViewById(R.id.tv_no_reg_event));
 	gridView.setAdapter(adapter);
 	getView().findViewById(R.id.btn_profile_logout).setOnClickListener(new View.OnClickListener() {
 	  @Override
 	  public void onClick(View v) {
 		FirebaseAuth.getInstance().signOut();
 		AuthUI.getInstance().signOut(activity.getApplicationContext());
-		Intent intent = new Intent(getActivity(), MainActivity.class);
+		Intent intent = new Intent(activity, MainActivity.class);
 		intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP | Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
 		startActivity(intent);
 	  }
