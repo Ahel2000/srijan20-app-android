@@ -1,6 +1,5 @@
 package in.srijanju.androidapp.view;
 
-import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
 import android.view.LayoutInflater;
@@ -14,6 +13,7 @@ import android.widget.Toast;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
+import androidx.fragment.app.FragmentActivity;
 
 import com.bumptech.glide.Glide;
 import com.firebase.ui.auth.AuthUI;
@@ -27,30 +27,32 @@ import com.google.firebase.database.FirebaseDatabase;
 import java.util.ArrayList;
 
 import in.srijanju.androidapp.R;
-import in.srijanju.androidapp.SrijanActivity;
-
 
 public class Gallery extends Fragment {
-	@Override
-	public void onAttach(Context context) {
-		super.onAttach(context);
-	}
 
-	@Nullable
-	@Override
-	public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
-		return inflater.inflate(R.layout.activity_gallery, container, false);
-	}
-	@Override
+  @Nullable
+  @Override
+  public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
+	return inflater.inflate(R.layout.activity_gallery, container, false);
+  }
+
+  @Override
   public void onActivityCreated(@Nullable Bundle savedInstanceState) {
 	super.onActivityCreated(savedInstanceState);
 
+	final FragmentActivity activity = getActivity();
+	View view = getView();
+	if (activity == null || view == null) {
+	  Toast.makeText(getContext(), "Some error occurred", Toast.LENGTH_SHORT).show();
+	  return;
+	}
+
 	FirebaseUser user = FirebaseAuth.getInstance().getCurrentUser();
 	if (user == null) {
-	  Toast.makeText(getActivity(), "Not logged in", Toast.LENGTH_SHORT).show();
+	  Toast.makeText(activity, "Not logged in", Toast.LENGTH_SHORT).show();
 	  FirebaseAuth.getInstance().signOut();
-	  AuthUI.getInstance().signOut(getContext());
-	  Intent intent = new Intent(getActivity(), MainActivity.class);
+	  AuthUI.getInstance().signOut(activity.getApplicationContext());
+	  Intent intent = new Intent(activity, MainActivity.class);
 	  intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP | Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
 	  startActivity(intent);
 	  return;
@@ -83,7 +85,7 @@ public class Gallery extends Fragment {
 		// Gallery item is just an image
 		View v;
 		if (convertView == null) {
-		  v = new ImageView(getActivity());
+		  v = new ImageView(activity);
 		  Glide.with(Gallery.this).load(galleryList.get(position)).into((ImageView) v);
 		} else {
 		  v = convertView;
