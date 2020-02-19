@@ -67,12 +67,14 @@
 	<!-- Facebook application ID and custom URL scheme (app ID prefixed by 'fb'). -->
 	<string name="facebook_application_id" translatable="false">2489104001207526</string>
 	<string name="facebook_login_protocol_scheme" translatable="false">fb2489104001207526</string>
-	<string name="srijan_merchandise">Srijan merchandise</string>
-	<string name="buy_our_tshirt_now">Buy our tshirt now!</string>
-	<string name="looking_for_workshops">Looking for workshops and other events?\nClick here
-		to register</string>
+	<string name="srijan_merchandise">Merchandise</string>
+	<string name="buy_now">Buy now!</string>
 	<string name="registered_events">Registered events</string>
 	<string name="apply">Apply</string>
 	<string name="no_registration_yet">No registration yet</string>
+	<string name="mementos_submissions_here">Mementos submissions here</string>
+	<string name="register_for_workshop_here_website">Register for workshop here (website)</string>
+	<string name="buy_merch">Buy the official Srijan 20 merchandise.\n\nGet your name printed
+		T-shirt for ₹300/-\nFor multiple orders, contact 9333324765 (Soumyadip)</string>
 
 </resources>

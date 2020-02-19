@@ -7,7 +7,7 @@
 	tools:context=".view.Events">
 
 	<TextView
-		android:id="@+id/tv_works"
+		android:id="@+id/tv_workshop"
 		android:layout_width="0dp"
 		android:layout_height="wrap_content"
 		android:layout_gravity="center_horizontal"
@@ -15,15 +15,36 @@
 		android:layout_marginTop="8dp"
 		android:layout_marginEnd="12dp"
 		android:background="@drawable/outline_general"
-		android:fontFamily="sans-serif-light"
+		android:fontFamily="sans-serif-condensed-light"
 		android:gravity="center_horizontal"
 		android:padding="4dp"
-		android:text="@string/looking_for_workshops"
+		android:text="@string/register_for_workshop_here_website"
 		android:textColor="@android:color/black"
-		app:layout_constraintBottom_toTopOf="@id/gv_events"
+		android:textSize="18sp"
+		app:layout_constraintBottom_toTopOf="@id/tv_mementos"
 		app:layout_constraintEnd_toEndOf="parent"
 		app:layout_constraintStart_toStartOf="parent"
 		app:layout_constraintTop_toTopOf="parent" />
+
+	<TextView
+		android:id="@+id/tv_mementos"
+		android:layout_width="0dp"
+		android:layout_height="wrap_content"
+		android:layout_gravity="center_horizontal"
+		android:layout_marginStart="12dp"
+		android:layout_marginTop="8dp"
+		android:layout_marginEnd="12dp"
+		android:background="@drawable/outline_general"
+		android:fontFamily="sans-serif-condensed-light"
+		android:gravity="center_horizontal"
+		android:padding="4dp"
+		android:text="@string/mementos_submissions_here"
+		android:textColor="@android:color/black"
+		android:textSize="18sp"
+		app:layout_constraintBottom_toTopOf="@id/gv_events"
+		app:layout_constraintEnd_toEndOf="parent"
+		app:layout_constraintStart_toStartOf="parent"
+		app:layout_constraintTop_toBottomOf="@id/tv_workshop" />
 
 	<GridView
 		android:id="@+id/gv_events"
@@ -37,6 +58,6 @@
 		app:layout_constraintBottom_toBottomOf="parent"
 		app:layout_constraintEnd_toEndOf="parent"
 		app:layout_constraintStart_toStartOf="parent"
-		app:layout_constraintTop_toBottomOf="@id/tv_works" />
+		app:layout_constraintTop_toBottomOf="@id/tv_mementos" />
 
 </androidx.constraintlayout.widget.ConstraintLayout>

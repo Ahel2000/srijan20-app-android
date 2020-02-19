@@ -161,6 +161,9 @@ public class MainPage extends SrijanActivity implements
 		navController.navigate(R.id.sponsorsFrag);
 		break;
 
+	  case R.id.merch:
+		navController.navigate(R.id.merchFrag);
+		break;
 	}
 	return true;
 
