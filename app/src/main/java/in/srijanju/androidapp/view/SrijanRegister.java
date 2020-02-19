@@ -3,10 +3,13 @@ package in.srijanju.androidapp.view;
 import android.content.Intent;
 import android.graphics.Color;
 import android.graphics.drawable.ColorDrawable;
+import android.os.Build;
 import android.os.Bundle;
 import android.text.InputType;
 import android.view.Gravity;
 import android.view.View;
+import android.view.Window;
+import android.view.WindowManager;
 import android.widget.Button;
 import android.widget.Toast;
 
@@ -45,6 +48,12 @@ public class SrijanRegister extends AppCompatActivity {
 	  startActivity(intent);
 	  finish();
 	  return;
+	}
+
+	if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
+	  Window window = getWindow();
+	  window.addFlags(WindowManager.LayoutParams.FLAG_DRAWS_SYSTEM_BAR_BACKGROUNDS);
+	  window.setStatusBarColor(getResources().getColor(R.color.colorPrimaryDark));
 	}
 
 	final TextInputEditText etName = findViewById(R.id.et_name);
