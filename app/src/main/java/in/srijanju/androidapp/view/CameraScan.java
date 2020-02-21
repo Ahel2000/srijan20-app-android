@@ -103,7 +103,7 @@ public class CameraScan extends AppCompatActivity {
 
 			  @Override
 			  public void onCancelled(@NonNull DatabaseError databaseError) {
-
+				Toast.makeText(CameraScan.this, "Didn't work", Toast.LENGTH_SHORT).show();
 			  }
 			});
 		  }

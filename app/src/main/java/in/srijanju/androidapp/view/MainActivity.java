@@ -67,7 +67,7 @@ public class MainActivity extends AppCompatActivity {
 	  public void run() {
 		// Sleep for 100ms and check if user is signed in
 		try {
-		  Thread.sleep(100);
+		  Thread.sleep(1000);
 		} catch (InterruptedException e) {
 		  e.printStackTrace();
 		}
@@ -84,6 +84,8 @@ public class MainActivity extends AppCompatActivity {
 		  public void run() {
 			final Button btnSign = findViewById(R.id.btn_mp_signin);
 			btnSign.setBackgroundColor(getResources().getColor(R.color.colorPrimaryDark));
+			btnSign.setClickable(true);
+			btnSign.setFocusable(true);
 			btnSign.setOnClickListener(new View.OnClickListener() {
 			  @Override
 			  public void onClick(View v) {

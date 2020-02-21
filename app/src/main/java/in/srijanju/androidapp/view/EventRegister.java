@@ -222,13 +222,20 @@ public class EventRegister extends SrijanActivity {
 			  TextInputEditText EMAIL = x.findViewById(R.id.userIDTextInputEditText);
 			  final String email = EMAIL.getText() != null ? EMAIL.getText().toString() : "";
 
+			  final int ii = i;
 			  FirebaseDatabase.getInstance().getReference("srijan/profile").orderByChild(
 					  "parentprofile/email").equalTo(email).addListenerForSingleValueEvent(new ValueEventListener() {
 				@Override
 				public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
 				  if (!dataSnapshot.exists()) {
-					Toast.makeText(EventRegister.this, "One of the members did not register for " +
-							"Srijan", Toast.LENGTH_SHORT).show();
+					Toast.makeText(EventRegister.this, "#" + (ii + 2) + " is not " +
+							"registered for Srijan", Toast.LENGTH_SHORT).show();
+					btnRegister.setEnabled(true);
+					return;
+				  }
+				  if (dataSnapshot.getChildren().iterator().next().child("events").child(event.code).exists()) {
+					Toast.makeText(EventRegister.this, "#" + (ii + 2) + " is already registered" +
+							" for this event", Toast.LENGTH_SHORT).show();
 					btnRegister.setEnabled(true);
 					return;
 				  }
