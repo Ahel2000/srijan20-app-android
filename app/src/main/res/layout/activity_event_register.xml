@@ -29,6 +29,7 @@
 		app:layout_constraintTop_toBottomOf="@id/tv_event_reg">
 
 		<LinearLayout
+			android:id="@+id/linear"
 			android:layout_width="match_parent"
 			android:layout_height="wrap_content"
 			android:orientation="vertical">
@@ -132,42 +133,11 @@
 					android:inputType="textEmailAddress" />
 			</com.google.android.material.textfield.TextInputLayout>
 
-			<com.google.android.material.textfield.TextInputLayout
-				android:id="@+id/in_team_mem2"
-				style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox.Dense"
+			<LinearLayout
 				android:layout_width="match_parent"
 				android:layout_height="wrap_content"
-				android:layout_marginTop="15dp"
-				app:boxStrokeColor="@color/colorAccent"
-				app:hintTextColor="@color/colorAccent">
-
-				<com.google.android.material.textfield.TextInputEditText
-					android:id="@+id/et_team_mem2"
-					android:layout_width="match_parent"
-					android:layout_height="wrap_content"
-					android:hint="@string/team_member_2"
-					android:importantForAutofill="no"
-					android:inputType="textEmailAddress" />
-			</com.google.android.material.textfield.TextInputLayout>
-
-			<com.google.android.material.textfield.TextInputLayout
-				android:id="@+id/in_team_mem3"
-				style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox.Dense"
-				android:layout_width="match_parent"
-				android:layout_height="wrap_content"
-				android:layout_marginTop="15dp"
-				app:boxStrokeColor="@color/colorAccent"
-				app:hintTextColor="@color/colorAccent">
-
-				<com.google.android.material.textfield.TextInputEditText
-					android:id="@+id/et_team_mem3"
-					android:layout_width="match_parent"
-					android:layout_height="wrap_content"
-					android:hint="@string/team_member_3"
-					android:importantForAutofill="no"
-					android:inputType="textEmailAddress" />
-			</com.google.android.material.textfield.TextInputLayout>
-
+				android:orientation="vertical"
+				android:id="@+id/linearlayout"/>
 			<TextView
 				android:layout_width="wrap_content"
 				android:layout_height="wrap_content"
@@ -191,6 +161,7 @@
 				android:textAllCaps="true"
 				android:textColor="@android:color/white"
 				app:backgroundTint="#4CAF50" />
+
 
 		</LinearLayout>
 	</ScrollView>
