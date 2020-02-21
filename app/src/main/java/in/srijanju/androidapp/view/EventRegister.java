@@ -4,9 +4,14 @@ import android.content.Intent;
 import android.os.Bundle;
 import android.text.Editable;
 import android.text.TextWatcher;
+import android.util.Log;
+import android.view.Gravity;
+import android.view.LayoutInflater;
 import android.view.View;
+import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.EditText;
+import android.widget.LinearLayout;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -15,6 +20,7 @@ import androidx.annotation.NonNull;
 import com.firebase.ui.auth.AuthUI;
 import com.google.android.gms.tasks.OnFailureListener;
 import com.google.android.gms.tasks.OnSuccessListener;
+import com.google.android.material.textfield.TextInputEditText;
 import com.google.android.material.textfield.TextInputLayout;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
@@ -24,6 +30,7 @@ import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.ValueEventListener;
 
+import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Locale;
 import java.util.Map;
@@ -47,6 +54,7 @@ public class EventRegister extends SrijanActivity {
   SrijanEvent event;
 
   String uid2 = null, uid3 = null;
+  Counter c=new Counter();
 
   @Override
   protected void onCreate(Bundle savedInstanceState) {
@@ -79,12 +87,12 @@ public class EventRegister extends SrijanActivity {
 	  return;
 	}
 
-	if (event.maxts == 0) {
+	/*if (event.maxts == 0) {
 	  Toast.makeText(EventRegister.this, "Registration not yet started",
 			  Toast.LENGTH_SHORT).show();
 	  finish();
 	  return;
-	}
+	}*/
 
 	EditText etEventName = findViewById(R.id.et_event_name);
 	etEventName.setText(event.name);
@@ -120,8 +128,52 @@ public class EventRegister extends SrijanActivity {
 	etMem1.setEnabled(false);
 
 	etLeadContact = findViewById(R.id.et_team_lead_contact);
-	etMem2 = findViewById(R.id.et_team_mem2);
-	etMem3 = findViewById(R.id.et_team_mem3);
+	//etMem2 = findViewById(R.id.et_team_mem2);
+	//etMem3 = findViewById(R.id.et_team_mem3);
+
+
+
+	  /*LinearLayout linearLayout= (LinearLayout)findViewById(R.id.linear);      //find the linear layout
+	  View view = LayoutInflater.from(this).inflate(R.layout.activity_event_register, null);
+	  TextInputLayout userNameIDTextInputLayout=view.findViewById(R.id.in_team_lead_contact);
+	  TextInputEditText userNameInputEditText = view.findViewById(R.id.et_team_lead_contact);
+	  userNameIDTextInputLayout.setHint("Please Enter User Name");
+	  linearLayout.addView(view);*/
+
+	  LinearLayout linearLayout= (LinearLayout)findViewById(R.id.linearlayout);
+	  final ArrayList<View> viewsAdded = new ArrayList<View>();
+
+	  //replace 4 with event.maxts
+	  for(int i=2;i<=4;i++) {
+		  View view = LayoutInflater.from(this).inflate(R.layout.temp_layout, null);
+		  TextInputLayout userNameIDTextInputLayout = view.findViewById(R.id.userIDTextInputLayout);
+		  TextInputEditText userNameInputEditText = view.findViewById(R.id.userIDTextInputEditText);
+		  userNameIDTextInputLayout.setHint("Enter team member "+i+" email");
+		  viewsAdded.add(view);
+		  linearLayout.addView(view);
+	  }
+
+
+	 /* Button btn= findViewById(R.id.btn);
+	  btn.setOnClickListener(new View.OnClickListener() {
+								 @Override
+								 public void onClick(View v) {
+								 	for(int i=0;i<3;i++) {
+										View x = viewsAdded.get(i);
+
+										TextInputEditText EMAIL = x.findViewById(R.id.userIDTextInputEditText);
+										Log.v("email", EMAIL.getText().toString());
+									}
+
+								 }
+							 });
+
+	*/
+
+
+
+
+
 
 	// When "register" is clicked, validate the data and push to the database
 	btnRegister = findViewById(R.id.btn_register);
@@ -154,7 +206,40 @@ public class EventRegister extends SrijanActivity {
 			}
 
 			// Verify user email
-			String email2 = etMem2.getText().toString().trim();
+			  int no_of_members=0;
+			  //replace 3 with event.maxts-1
+			  for(int i=0;i<3;i++) {
+				  View x = viewsAdded.get(i);
+
+				  TextInputEditText EMAIL = x.findViewById(R.id.userIDTextInputEditText);
+				  Log.v("email", EMAIL.getText().toString());
+				  String email=EMAIL.getText().toString();
+				  if(email.equals(""))
+				  {
+
+				  }
+				  else if (!email.equals("") && !email.matches("[A-Z0-9a-z._%+-]+@[A-Za-z0-9.-]+\\" +
+						  ".[A-Za-z]{2,64}")) {
+					  Toast.makeText(EventRegister.this, "Enter valid email"+(i+2), Toast.LENGTH_SHORT).show();
+					  btnRegister.setEnabled(true);
+					  return;
+				  }
+				  else
+				  {
+				  	no_of_members++;
+				  }
+
+
+			  }
+			  no_of_members++;
+			  if(no_of_members<3)//replace 3 with event.mints
+			  {
+				  Toast.makeText(EventRegister.this,"Team size should be more than 3", Toast.LENGTH_SHORT).show();
+				  btnRegister.setEnabled(true);
+				  return;
+			  }
+			  final int number=no_of_members;
+			/*String email2 = etMem2.getText().toString().trim();
 			String email3 = etMem3.getText().toString().trim();
 			if (!email2.equals("") && !email2.matches("[A-Z0-9a-z._%+-]+@[A-Za-z0-9.-]+\\" +
 					".[A-Za-z]{2,64}")) {
@@ -167,16 +252,88 @@ public class EventRegister extends SrijanActivity {
 			  Toast.makeText(EventRegister.this, "Enter valid email3", Toast.LENGTH_SHORT).show();
 			  btnRegister.setEnabled(true);
 			  return;
-			}
+			}*/
 
 			// Check if users exists
+			/*
 			if (!email2.equals("")) {
 			  checkEmail2Exists(email2, email3, teamName);
 			} else if (!email3.equals("")) {
 			  checkEmail3Exists(email3, teamName);
 			} else {
 			  createTeam(teamName);
-			}
+			}*/
+
+				final ArrayList<String> uids =new ArrayList<String>();
+
+				for(int i=0;i<number-1;i++)
+				{
+					View x = viewsAdded.get(i);
+
+					TextInputEditText EMAIL = x.findViewById(R.id.userIDTextInputEditText);
+					//Log.v("email", EMAIL.getText().toString());
+					String email=EMAIL.getText().toString();
+
+
+					FirebaseDatabase.getInstance().getReference("srijan/profile").orderByChild(
+							"parentprofile/email").equalTo(email).addListenerForSingleValueEvent(new ValueEventListener() {
+						@Override
+						public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
+							if (!dataSnapshot.exists()) {
+								Toast.makeText(EventRegister.this, "One of the members did not register for srijan", Toast.LENGTH_SHORT).show();
+								btnRegister.setEnabled(true);
+								return;
+							}
+							else {
+								String uid=dataSnapshot.getChildren().iterator().next().getKey();
+								uids.add(uid);
+								c.add();
+								Log.v("counter","value"+c.counter);
+								if (c.counter == number - 1) {
+									c.f = 1;
+									for(String s:uids)
+									{
+										Log.v("uid",s);
+									}
+
+									//all users exist.Update dashboard
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+									Log.v("success","Yahooooooo");
+
+								}
+							}
+							// If second user exists, get its uid and move to u3
+
+						}
+
+						@Override
+						public void onCancelled(@NonNull DatabaseError databaseError) {
+							Toast.makeText(EventRegister.this, "Some error occurred! Try again.",
+									Toast.LENGTH_SHORT).show();
+							btnRegister.setEnabled(true);
+						}
+					});
+
+
+
+
+				}
+
 		  }
 
 		  @Override
@@ -184,11 +341,14 @@ public class EventRegister extends SrijanActivity {
 			btnRegister.setEnabled(true);
 		  }
 		});
+
 	  }
 	});
+
   }
 
   // Check if second user is valid
+	/*
   private void checkEmail2Exists(final String email, final String nextMail, final String teamname) {
 	FirebaseDatabase.getInstance().getReference("srijan/profile").orderByChild(
 			"parentprofile/email").equalTo(email).addListenerForSingleValueEvent(new ValueEventListener() {
@@ -340,5 +500,15 @@ public class EventRegister extends SrijanActivity {
 	Toast.makeText(EventRegister.this, "Something went wrong! Report to srijanjdvu.ac@gmail" +
 			".com for any queries", Toast.LENGTH_LONG).show();
 	btnRegister.setEnabled(true);
-  }
+  }*/
+
+	private class Counter{
+		private int counter=0;
+		private int f=0;
+
+		private void add()
+		{
+			counter++;
+		}
+	}
 }
