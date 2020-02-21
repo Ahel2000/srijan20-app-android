@@ -15,14 +15,6 @@
       },
       "oauth_client": [
         {
-          "client_id": "614644848015-basue4d2jn0e3dcp3041be1d2ov69qkf.apps.googleusercontent.com",
-          "client_type": 1,
-          "android_info": {
-            "package_name": "in.srijanju.androidapp",
-            "certificate_hash": "02c2746e776fc2739c88a9c7535b6ad0b2ce1957"
-          }
-        },
-        {
           "client_id": "614644848015-s8mr80ep18bo3magp7dc0fp89pjj2klq.apps.googleusercontent.com",
           "client_type": 1,
           "android_info": {
