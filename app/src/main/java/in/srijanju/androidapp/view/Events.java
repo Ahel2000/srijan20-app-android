@@ -142,7 +142,7 @@ public class Events extends Fragment {
 	super.onResume();
 
 	// Get the list of events
-	ref.addChildEventListener(eventListener);
+	ref.orderByChild("type").addChildEventListener(eventListener);
   }
 
   @Override
