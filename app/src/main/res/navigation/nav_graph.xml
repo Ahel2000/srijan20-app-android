@@ -8,7 +8,7 @@
 	<fragment
 		android:id="@+id/profileFrag"
 		android:name="in.srijanju.androidapp.view.Profile"
-		android:label="Profile"
+		android:label="Dashboard"
 		tools:layout="@layout/activity_profile" />
 	<fragment
 		android:id="@+id/aboutFrag"
