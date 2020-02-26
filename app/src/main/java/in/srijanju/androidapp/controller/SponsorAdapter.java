@@ -55,7 +55,7 @@ public class SponsorAdapter extends BaseAdapter {
 	LayoutInflater inflater = context.getLayoutInflater();
 	View v;
 	if (convertView == null) {
-	  v = inflater.inflate(R.layout.item_sponsor, null, true);
+	  v = inflater.inflate(R.layout.item_sponsor, parent, false);
 
 	  AnimationSet set = new AnimationSet(true);
 

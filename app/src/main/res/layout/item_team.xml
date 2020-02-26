@@ -3,7 +3,7 @@
 	xmlns:app="http://schemas.android.com/apk/res-auto"
 	xmlns:tools="http://schemas.android.com/tools"
 	android:layout_width="match_parent"
-	android:layout_height="98dp"
+	android:layout_height="86dp"
 	android:clickable="true"
 	android:focusable="true"
 	android:foreground="?android:attr/selectableItemBackground">
@@ -14,8 +14,8 @@
 
 		<ImageView
 			android:id="@+id/iv_team_mem_pic"
-			android:layout_width="98dp"
-			android:layout_height="98dp"
+			android:layout_width="86dp"
+			android:layout_height="86dp"
 			android:contentDescription="@string/team_member_picture"
 			android:scaleType="centerCrop"
 			app:layout_constraintStart_toStartOf="parent"
@@ -23,33 +23,40 @@
 
 		<TextView
 			android:id="@+id/tv_team_mem_name"
-			android:layout_width="wrap_content"
+			android:layout_width="0dp"
 			android:layout_height="wrap_content"
 			android:layout_marginStart="8dp"
+			android:layout_marginTop="4dp"
+			android:textAllCaps="true"
 			android:textColor="@android:color/black"
-			android:textSize="24sp"
+			android:textSize="18sp"
+			app:layout_constraintEnd_toEndOf="parent"
 			app:layout_constraintStart_toEndOf="@id/iv_team_mem_pic"
 			app:layout_constraintTop_toTopOf="parent"
 			tools:text="Rishav Agarwal" />
 
 		<TextView
 			android:id="@+id/tv_team_mem_dept"
-			android:layout_width="wrap_content"
+			android:layout_width="0dp"
 			android:layout_height="wrap_content"
 			android:layout_marginStart="8dp"
+			android:textSize="12sp"
+			android:textStyle="italic"
+			app:layout_constraintEnd_toEndOf="parent"
 			app:layout_constraintStart_toEndOf="@id/iv_team_mem_pic"
 			app:layout_constraintTop_toBottomOf="@id/tv_team_mem_name"
 			tools:text="IT 4th year" />
 
 		<TextView
 			android:id="@+id/tv_team_mem_post"
-			android:layout_width="wrap_content"
+			android:layout_width="0dp"
 			android:layout_height="wrap_content"
 			android:layout_marginStart="8dp"
+			android:layout_marginTop="4dp"
 			android:ellipsize="end"
-			android:lines="2"
-			android:textColor="@android:color/black"
-			android:textSize="14sp"
+			android:textAllCaps="true"
+			android:textSize="12sp"
+			app:layout_constraintEnd_toEndOf="parent"
 			app:layout_constraintStart_toEndOf="@id/iv_team_mem_pic"
 			app:layout_constraintTop_toBottomOf="@id/tv_team_mem_dept"
 			tools:text="Coding events lead, Android app" />

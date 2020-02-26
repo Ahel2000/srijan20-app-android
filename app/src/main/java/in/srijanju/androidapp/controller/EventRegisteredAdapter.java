@@ -46,7 +46,7 @@ public class EventRegisteredAdapter extends BaseAdapter {
 	LayoutInflater inflater = context.getLayoutInflater();
 	View v;
 	if (convertView == null) {
-	  v = inflater.inflate(R.layout.item_event_reg, null, true);
+	  v = inflater.inflate(R.layout.item_event_reg, parent, false);
 
 	  AnimationSet set = new AnimationSet(true);
 

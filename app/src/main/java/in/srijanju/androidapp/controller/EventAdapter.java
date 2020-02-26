@@ -56,7 +56,7 @@ public class EventAdapter extends BaseAdapter {
 	LayoutInflater inflater = context.getLayoutInflater();
 	View v;
 	if (convertView == null) {
-	  v = inflater.inflate(R.layout.item_event, null, true);
+	  v = inflater.inflate(R.layout.item_event, parent, false);
 
 	  AnimationSet set = new AnimationSet(true);
 
