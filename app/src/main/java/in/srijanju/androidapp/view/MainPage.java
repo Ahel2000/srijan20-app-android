@@ -35,8 +35,6 @@ import in.srijanju.androidapp.model.User;
 
 public class MainPage extends SrijanActivity implements
 		NavigationView.OnNavigationItemSelectedListener {
-  public static final String SRIJAN_MERCH_URL = "https://www.srijanju.in/app/merchandise";
-  public static final String SRIJAN_WORKSHOP_URL = "https://www.srijanju.in/app/workshops";
   public Toolbar toolbar;
   public DrawerLayout drawerLayout;
   public NavController navController;
@@ -81,7 +79,7 @@ public class MainPage extends SrijanActivity implements
 	navigationView.setNavigationItemSelectedListener(this);
 
 	final View headerView = navigationView.getHeaderView(0);
-	Glide.with(MainPage.this).asDrawable().load("https://www.itl.cat/pngfile/big/212-2125475_dark-blue-material-design.jpg").into(new CustomTarget<Drawable>() {
+	Glide.with(MainPage.this).asDrawable().load("https://firebasestorage.googleapis.com/v0/b/srijanju20.appspot.com/o/app_nav_back.jpg?alt=media&token=6eeeb98c-41a3-4e9e-b407-3f0b037bc265").into(new CustomTarget<Drawable>() {
 	  @Override
 	  public void onResourceReady(@NonNull Drawable resource, @Nullable Transition<? super Drawable> transition) {
 		headerView.setBackground(resource);
