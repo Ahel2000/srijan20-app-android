@@ -5,6 +5,7 @@ import android.graphics.Color;
 import android.graphics.drawable.ColorDrawable;
 import android.os.Build;
 import android.os.Bundle;
+import android.util.Patterns;
 import android.view.View;
 import android.view.Window;
 import android.view.WindowManager;
@@ -72,8 +73,16 @@ public class EventDescription extends SrijanActivity {
 	event_name.setText(event.name);
 	event_type.setText(event.type);
 	event_desc.setText(event.desc);
+	// Rules. Add rules url if available
+	String rules = "";
 	if (event.rules != null && !event.rules.equals("") && !event.rules.equals("none")) {
-	  event_rules.setText(event.rules);
+	  rules = event.rules + "\n";
+	}
+	if (event.rules_url != null && !event.rules_url.equals("") && !event.rules_url.equals("none")) {
+	  rules += "\nComplete set of rules: " + event.rules_url;
+	}
+	if (!rules.equals("")) {
+	  event_rules.setText(rules);
 	  findViewById(R.id.cv_rules).setVisibility(View.VISIBLE);
 	}
 	event_contact.setText(event.poc);
@@ -92,6 +101,15 @@ public class EventDescription extends SrijanActivity {
 
 	regClickListener = new View.OnClickListener() {
 	  public void onClick(View v) {
+		// If in-app registration is not used
+		if (event.reg_link != null && !event.reg_link.equals("") && !event.reg_link.equals("none") && Patterns.WEB_URL.matcher(event.reg_link).matches()) {
+		  Intent myIntent = new Intent(EventDescription.this, webview.class);
+		  myIntent.putExtra("url", event.reg_link);
+		  startActivity(myIntent);
+		  return;
+		}
+
+		// Check if registration started
 		if (event.maxts == 0) {
 		  Toast.makeText(EventDescription.this, "Registration for this event not yet started",
 				  Toast.LENGTH_SHORT).show();

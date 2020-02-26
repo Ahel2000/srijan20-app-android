@@ -1,7 +1,6 @@
 package in.srijanju.androidapp.view;
 
 import android.content.Intent;
-import android.net.Uri;
 import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -46,15 +45,6 @@ public class Merch extends Fragment {
 	  Intent intent = new Intent(activity, MainActivity.class);
 	  intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP | Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
 	  startActivity(intent);
-	  return;
 	}
-
-	view.findViewById(R.id.btn_buy_merch).setOnClickListener(new View.OnClickListener() {
-	  @Override
-	  public void onClick(View v) {
-		Intent browserIntent = new Intent(Intent.ACTION_VIEW, Uri.parse("https://www.srijanju.in/app/merchandise"));
-		startActivity(browserIntent);
-	  }
-	});
   }
 }

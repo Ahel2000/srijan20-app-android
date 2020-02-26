@@ -5,6 +5,7 @@ import android.content.Intent;
 import android.os.Bundle;
 import android.text.Editable;
 import android.text.TextWatcher;
+import android.util.Patterns;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.widget.Button;
@@ -74,6 +75,15 @@ public class EventRegister extends SrijanActivity {
 	event = (SrijanEvent) extras.getSerializable("event");
 	if (event == null || user == null) {
 	  Toast.makeText(this, "Something went wrong! :(", Toast.LENGTH_SHORT).show();
+	  finish();
+	  return;
+	}
+
+	// If in-app registration is not used
+	if (event.reg_link != null && !event.reg_link.equals("") && !event.reg_link.equals("none") && Patterns.WEB_URL.matcher(event.reg_link).matches()) {
+	  Intent myIntent = new Intent(EventRegister.this, webview.class);
+	  myIntent.putExtra("url", event.reg_link);
+	  startActivity(myIntent);
 	  finish();
 	  return;
 	}

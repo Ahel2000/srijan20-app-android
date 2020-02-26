@@ -10,7 +10,8 @@ public class SrijanEvent implements Serializable {
   public String name;
   public String type;
   public String rules;
-  public String url;
+  public String rules_url;
+  public String reg_link;
   public String poster;
   public String code;
   public int mints;

@@ -80,7 +80,6 @@ public class Events extends Fragment {
   @Override
   public void onActivityCreated(Bundle savedInstanceState) {
 	super.onActivityCreated(savedInstanceState);
-	adapter = new EventAdapter(getActivity(), events);
 
 	final FragmentActivity activity = getActivity();
 	View view = getView();
@@ -100,6 +99,7 @@ public class Events extends Fragment {
 	  return;
 	}
 
+	adapter = new EventAdapter(activity, events);
 	GridView gridView = getView().findViewById(R.id.gv_events);
 
 	// Open the event description page to show the details of the event

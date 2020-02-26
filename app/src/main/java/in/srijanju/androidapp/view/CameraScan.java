@@ -5,6 +5,7 @@ import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.os.Build;
 import android.os.Bundle;
+import android.util.Patterns;
 import android.view.View;
 import android.widget.Toast;
 
@@ -89,16 +90,27 @@ public class CameraScan extends AppCompatActivity {
 				  Toast.makeText(CameraScan.this, "Didn't work", Toast.LENGTH_SHORT).show();
 				  return;
 				}
+
+				// If in-app registration is not used
+				if (event.reg_link != null && !event.reg_link.equals("") && !event.reg_link.equals("none") && Patterns.WEB_URL.matcher(event.reg_link).matches()) {
+				  Intent myIntent = new Intent(CameraScan.this, webview.class);
+				  myIntent.putExtra("url", event.reg_link);
+				  startActivity(myIntent);
+				  finish();
+				  return;
+				}
 				if (event.maxts == 0) {
 				  Toast.makeText(CameraScan.this, "Registration not yet started",
 						  Toast.LENGTH_SHORT).show();
 				  return;
 				}
+
 				Intent eventIntent = new Intent(CameraScan.this, EventRegister.class);
 				Bundle bundle = new Bundle();
 				bundle.putSerializable("event", event);
 				eventIntent.putExtras(bundle);
 				startActivity(eventIntent);
+				finish();
 			  }
 
 			  @Override

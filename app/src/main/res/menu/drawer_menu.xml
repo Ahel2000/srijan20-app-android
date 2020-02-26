@@ -9,6 +9,9 @@
 			android:id="@+id/sponsors"
 			android:title="@string/sponsors" />
 		<item
+			android:id="@+id/team"
+			android:title="@string/team" />
+		<item
 			android:id="@+id/merch"
 			android:title="@string/srijan_merchandise" />
 		<item

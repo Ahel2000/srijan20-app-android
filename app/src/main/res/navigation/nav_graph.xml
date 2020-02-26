@@ -40,4 +40,9 @@
 		android:name="in.srijanju.androidapp.view.Merch"
 		android:label="Merchandise"
 		tools:layout="@layout/activity_merch" />
+	<fragment
+		android:id="@+id/teamFrag"
+		android:name="in.srijanju.androidapp.view.Team"
+		android:label="Team"
+		tools:layout="@layout/activity_team" />
 </navigation>

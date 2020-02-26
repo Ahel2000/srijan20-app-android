@@ -35,7 +35,6 @@ import in.srijanju.androidapp.model.User;
 public class Profile extends Fragment {
 
   private final ArrayList<Pair<String, String>> events = new ArrayList<>();
-  FirebaseUser user;
   private DatabaseReference ref;
   private EventRegisteredAdapter adapter;
   private ChildEventListener regEventListener = new ChildEventListener() {
@@ -88,7 +87,7 @@ public class Profile extends Fragment {
 	}
 
 	adapter = new EventRegisteredAdapter(activity, events);
-	user = FirebaseAuth.getInstance().getCurrentUser();
+	FirebaseUser user = FirebaseAuth.getInstance().getCurrentUser();
 	if (user == null) {
 	  Toast.makeText(activity, "Not logged in", Toast.LENGTH_SHORT).show();
 	  FirebaseAuth.getInstance().signOut();
