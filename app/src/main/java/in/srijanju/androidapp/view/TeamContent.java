@@ -128,8 +128,8 @@ public class TeamContent extends Fragment {
 
 	adapter = new TeamAdapter(activity, members);
 	GridView gridView = getView().findViewById(R.id.gv_team);
-
 	gridView.setAdapter(adapter);
+	gridView.setEmptyView(view.findViewById(R.id.tv_no_team));
 
 	FirebaseDatabase db = FirebaseDatabase.getInstance();
 	ref = db.getReference("srijan/team/" + type);
