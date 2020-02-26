@@ -2,7 +2,9 @@ package in.srijanju.androidapp.controller;
 
 import android.app.Activity;
 import android.graphics.Bitmap;
+import android.graphics.Typeface;
 import android.graphics.drawable.Drawable;
+import android.util.TypedValue;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -55,7 +57,7 @@ public class TeamAdapter extends BaseAdapter {
 	LayoutInflater inflater = context.getLayoutInflater();
 	View v;
 	if (convertView == null) {
-	  v = inflater.inflate(R.layout.item_team, null, true);
+	  v = inflater.inflate(R.layout.item_team, parent, false);
 
 	  AnimationSet set = new AnimationSet(true);
 
@@ -76,8 +78,16 @@ public class TeamAdapter extends BaseAdapter {
 
 	name.setText(mems.get(position).name);
 	dy.setText(mems.get(position).dy);
-	post.setText(mems.get(position).post == null ? mems.get(position).event :
-			mems.get(position).post);
+	if (mems.get(position).post == null) {
+	  post.setText(mems.get(position).event);
+	  post.setTextSize(TypedValue.COMPLEX_UNIT_SP, 14);
+	  post.setTypeface(post.getTypeface(), Typeface.ITALIC);
+	  dy.setVisibility(View.GONE);
+	} else {
+	  post.setText(mems.get(position).post);
+	  post.setTextColor(v.getResources().getColor(android.R.color.black));
+	}
+
 	Glide.with(context).asBitmap().load(mems.get(position).dp).into(
 			new CustomTarget<Bitmap>() {
 			  @Override
