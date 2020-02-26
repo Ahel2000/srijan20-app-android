@@ -67,7 +67,7 @@ public class MainActivity extends AppCompatActivity {
 	  public void run() {
 		// Sleep for 100ms and check if user is signed in
 		try {
-		  Thread.sleep(1000);
+		  Thread.sleep(100);
 		} catch (InterruptedException e) {
 		  e.printStackTrace();
 		}

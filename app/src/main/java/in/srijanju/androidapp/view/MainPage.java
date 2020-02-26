@@ -162,6 +162,10 @@ public class MainPage extends SrijanActivity implements
 	  case R.id.merch:
 		navController.navigate(R.id.merchFrag);
 		break;
+
+	  case R.id.team:
+		navController.navigate(R.id.teamFrag);
+		break;
 	}
 	return true;
 

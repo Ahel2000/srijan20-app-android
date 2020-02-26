@@ -5,8 +5,7 @@ import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.ListView;
-import android.widget.TextView;
+import android.widget.GridView;
 import android.widget.Toast;
 
 import androidx.annotation.NonNull;
@@ -27,26 +26,21 @@ import com.google.firebase.database.ValueEventListener;
 import java.util.ArrayList;
 
 import in.srijanju.androidapp.R;
-import in.srijanju.androidapp.controller.SponsorAdapter;
-import in.srijanju.androidapp.model.Sponsor;
+import in.srijanju.androidapp.controller.TeamAdapter;
+import in.srijanju.androidapp.model.TeamMember;
 
-public class Sponsors extends Fragment {
+public class TeamContent extends Fragment {
 
-  private final ArrayList<Sponsor> sponsors = new ArrayList<>();
-  private SponsorAdapter adapter;
-  private DatabaseReference ref = null;
-
+  private String type;
+  private TeamAdapter adapter;
+  private ArrayList<TeamMember> members = new ArrayList<>();
   private ChildEventListener eventListener = new ChildEventListener() {
 	@Override
 	public void onChildAdded(
 			@NonNull DataSnapshot dataSnapshot, @Nullable String s) {
-	  try {
-		Sponsor sponsor = dataSnapshot.getValue(Sponsor.class);
-		sponsors.add(sponsor);
-		adapter.notifyDataSetChanged();
-	  } catch (Exception e) {
-		e.printStackTrace();
-	  }
+	  TeamMember member = dataSnapshot.getValue(TeamMember.class);
+	  members.add(member);
+	  adapter.notifyDataSetChanged();
 	}
 
 	@Override
@@ -69,21 +63,25 @@ public class Sponsors extends Fragment {
 			@NonNull DatabaseError databaseError) {
 	}
   };
-
-  private ValueEventListener sponsoredValueListener = new ValueEventListener() {
+  private DatabaseReference ref;
+  private ValueEventListener showListener = new ValueEventListener() {
 	@Override
 	public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
-	  Boolean isSpon = null;
-	  if (dataSnapshot.exists()) isSpon = dataSnapshot.getValue(Boolean.class);
-	  if (ref != null && eventListener != null)
-		ref.removeEventListener(eventListener);
-	  sponsors.clear();
-	  adapter.notifyDataSetChanged();
-	  if (isSpon == null || !isSpon) {
-		return;
-	  }
+	  Boolean _show;
+	  _show = dataSnapshot.getValue(Boolean.class);
+	  boolean show = false;
+	  if (_show != null) show = _show;
 
-	  ref.addChildEventListener(eventListener);
+	  if (show) {
+		ref.removeEventListener(eventListener);
+		members.clear();
+		adapter.notifyDataSetChanged();
+		ref.orderByChild((type != null && type.equals("core")) ? "order" : "event").addChildEventListener(eventListener);
+	  } else {
+		ref.removeEventListener(eventListener);
+		members.clear();
+		adapter.notifyDataSetChanged();
+	  }
 	}
 
 	@Override
@@ -91,10 +89,19 @@ public class Sponsors extends Fragment {
 	}
   };
 
-  @Nullable
+  public TeamContent() {
+	// Required empty public constructor
+  }
+
+  TeamContent(String type) {
+	this.type = type;
+  }
+
   @Override
-  public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
-	return inflater.inflate(R.layout.activity_sponsors, container, false);
+  public View onCreateView(LayoutInflater inflater, ViewGroup container,
+						   Bundle savedInstanceState) {
+	// Inflate the layout for this fragment
+	return inflater.inflate(R.layout.fragment_team_content, container, false);
   }
 
   @Override
@@ -110,45 +117,24 @@ public class Sponsors extends Fragment {
 
 	FirebaseUser user = FirebaseAuth.getInstance().getCurrentUser();
 	if (user == null) {
-	  Toast.makeText(activity, "Not logged in", Toast.LENGTH_SHORT).show();
+	  Toast.makeText(getActivity(), "Not logged in", Toast.LENGTH_SHORT).show();
 	  FirebaseAuth.getInstance().signOut();
 	  AuthUI.getInstance().signOut(activity.getApplicationContext());
-	  Intent intent = new Intent(activity, MainActivity.class);
+	  Intent intent = new Intent(getActivity(), MainActivity.class);
 	  intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP | Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
 	  startActivity(intent);
 	  return;
 	}
 
-	adapter = new SponsorAdapter(activity, sponsors);
+	adapter = new TeamAdapter(activity, members);
+	GridView gridView = getView().findViewById(R.id.gv_team);
 
-	ListView lvSponsors = getView().findViewById(R.id.lv_sponsors);
-	lvSponsors.setAdapter(adapter);
-	lvSponsors.setEmptyView(getView().findViewById(R.id.tv_no_sponsor));
-
-	final TextView tvSponsorText = getView().findViewById(R.id.tv_sponsor_text);
+	gridView.setAdapter(adapter);
 
 	FirebaseDatabase db = FirebaseDatabase.getInstance();
-	ref = db.getReference("srijan/sponsors");
-	DatabaseReference checkRef = db.getReference("srijan/sponsors/isSponsored");
-	db.getReference("srijan/sponsors/askSponsor").addListenerForSingleValueEvent(new ValueEventListener() {
-	  @Override
-	  public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
-		Boolean askSpon = null;
-		if (dataSnapshot.exists()) askSpon = dataSnapshot.getValue(Boolean.class);
-		if (askSpon == null || !askSpon) {
-		  tvSponsorText.setVisibility(View.GONE);
-		  return;
-		}
+	ref = db.getReference("srijan/team/" + type);
 
-		tvSponsorText.setVisibility(View.VISIBLE);
-	  }
-
-	  @Override
-	  public void onCancelled(@NonNull DatabaseError databaseError) {
-		tvSponsorText.setVisibility(View.GONE);
-	  }
-	});
-
-	checkRef.addListenerForSingleValueEvent(sponsoredValueListener);
+	DatabaseReference showRef = db.getReference("srijan/team/show");
+	showRef.addListenerForSingleValueEvent(showListener);
   }
 }

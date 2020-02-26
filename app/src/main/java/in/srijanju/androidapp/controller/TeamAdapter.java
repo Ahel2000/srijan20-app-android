@@ -9,7 +9,6 @@ import android.view.ViewGroup;
 import android.view.animation.Animation;
 import android.view.animation.AnimationSet;
 import android.view.animation.TranslateAnimation;
-import android.webkit.URLUtil;
 import android.widget.BaseAdapter;
 import android.widget.ImageView;
 import android.widget.TextView;
@@ -24,25 +23,26 @@ import com.bumptech.glide.request.transition.Transition;
 import java.util.ArrayList;
 
 import in.srijanju.androidapp.R;
-import in.srijanju.androidapp.model.Sponsor;
+import in.srijanju.androidapp.model.TeamMember;
 
-public class SponsorAdapter extends BaseAdapter {
+public class TeamAdapter extends BaseAdapter {
+
   private Activity context;
-  private ArrayList<Sponsor> sponsors;
+  private ArrayList<TeamMember> mems;
 
-  public SponsorAdapter(Activity context, ArrayList<Sponsor> list) {
+  public TeamAdapter(Activity context, ArrayList<TeamMember> list) {
 	this.context = context;
-	sponsors = list;
+	mems = list;
   }
 
   @Override
   public int getCount() {
-	return sponsors.size();
+	return mems.size();
   }
 
   @Override
   public Object getItem(int position) {
-	return sponsors.get(position);
+	return mems.get(position);
   }
 
   @Override
@@ -55,7 +55,7 @@ public class SponsorAdapter extends BaseAdapter {
 	LayoutInflater inflater = context.getLayoutInflater();
 	View v;
 	if (convertView == null) {
-	  v = inflater.inflate(R.layout.item_sponsor, null, true);
+	  v = inflater.inflate(R.layout.item_team, null, true);
 
 	  AnimationSet set = new AnimationSet(true);
 
@@ -68,33 +68,29 @@ public class SponsorAdapter extends BaseAdapter {
 	} else {
 	  v = convertView;
 	}
-	TextView name = v.findViewById(R.id.tv_sponsor_name);
-	TextView type = v.findViewById(R.id.tv_sponsor_type);
-	final ImageView ivPoster = v.findViewById(R.id.iv_sponsor_poster);
-	TextView link = v.findViewById(R.id.tv_sponsor_link);
 
-	String poster = sponsors.get(position).poster;
-	if (poster == null || poster.equals("") || !URLUtil.isHttpsUrl(poster))
-	  poster = "https://firebasestorage.googleapis.com/v0/b/srijanju20.appspot.com/o/srijan_poster.jpg?alt=media&token=03a68c2f-8beb-40b0-9353-da58fe7cc932";
+	TextView name = v.findViewById(R.id.tv_team_mem_name);
+	TextView dy = v.findViewById(R.id.tv_team_mem_dept);
+	TextView post = v.findViewById(R.id.tv_team_mem_post);
+	final ImageView ivDp = v.findViewById(R.id.iv_team_mem_pic);
 
-	Glide.with(context).asBitmap().load(poster).into(
+	name.setText(mems.get(position).name);
+	dy.setText(mems.get(position).dy);
+	post.setText(mems.get(position).post == null ? mems.get(position).event :
+			mems.get(position).post);
+	Glide.with(context).asBitmap().load(mems.get(position).dp).into(
 			new CustomTarget<Bitmap>() {
 			  @Override
 			  public void onResourceReady(
 					  @NonNull Bitmap resource, @Nullable Transition<? super Bitmap> transition) {
-				ivPoster.setImageBitmap(resource);
+				ivDp.setImageBitmap(resource);
 			  }
 
 			  @Override
 			  public void onLoadCleared(
 					  @Nullable Drawable placeholder) {
-
 			  }
 			});
-
-	name.setText(sponsors.get(position).name);
-	type.setText(sponsors.get(position).type);
-	link.setText(sponsors.get(position).url);
 
 	return v;
   }

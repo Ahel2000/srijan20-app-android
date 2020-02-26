@@ -4,6 +4,9 @@ import android.app.Activity;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.view.animation.Animation;
+import android.view.animation.AnimationSet;
+import android.view.animation.TranslateAnimation;
 import android.widget.BaseAdapter;
 import android.widget.TextView;
 
@@ -44,6 +47,15 @@ public class EventRegisteredAdapter extends BaseAdapter {
 	View v;
 	if (convertView == null) {
 	  v = inflater.inflate(R.layout.item_event_reg, null, true);
+
+	  AnimationSet set = new AnimationSet(true);
+
+	  Animation animT = new TranslateAnimation(position % 2 == 0 ? -100 : 100, 0f, 0f, 0f);
+
+	  set.addAnimation(animT);
+	  set.setDuration(250);
+
+	  v.startAnimation(set);
 	} else {
 	  v = convertView;
 	}

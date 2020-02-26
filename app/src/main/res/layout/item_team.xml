@@ -1,0 +1,59 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.cardview.widget.CardView xmlns:android="http://schemas.android.com/apk/res/android"
+	xmlns:app="http://schemas.android.com/apk/res-auto"
+	xmlns:tools="http://schemas.android.com/tools"
+	android:layout_width="match_parent"
+	android:layout_height="98dp"
+	android:clickable="true"
+	android:focusable="true"
+	android:foreground="?android:attr/selectableItemBackground">
+
+	<androidx.constraintlayout.widget.ConstraintLayout
+		android:layout_width="match_parent"
+		android:layout_height="match_parent">
+
+		<ImageView
+			android:id="@+id/iv_team_mem_pic"
+			android:layout_width="98dp"
+			android:layout_height="98dp"
+			android:contentDescription="@string/team_member_picture"
+			android:scaleType="centerCrop"
+			app:layout_constraintStart_toStartOf="parent"
+			app:layout_constraintTop_toTopOf="parent" />
+
+		<TextView
+			android:id="@+id/tv_team_mem_name"
+			android:layout_width="wrap_content"
+			android:layout_height="wrap_content"
+			android:layout_marginStart="8dp"
+			android:textColor="@android:color/black"
+			android:textSize="24sp"
+			app:layout_constraintStart_toEndOf="@id/iv_team_mem_pic"
+			app:layout_constraintTop_toTopOf="parent"
+			tools:text="Rishav Agarwal" />
+
+		<TextView
+			android:id="@+id/tv_team_mem_dept"
+			android:layout_width="wrap_content"
+			android:layout_height="wrap_content"
+			android:layout_marginStart="8dp"
+			app:layout_constraintStart_toEndOf="@id/iv_team_mem_pic"
+			app:layout_constraintTop_toBottomOf="@id/tv_team_mem_name"
+			tools:text="IT 4th year" />
+
+		<TextView
+			android:id="@+id/tv_team_mem_post"
+			android:layout_width="wrap_content"
+			android:layout_height="wrap_content"
+			android:layout_marginStart="8dp"
+			android:ellipsize="end"
+			android:lines="2"
+			android:textColor="@android:color/black"
+			android:textSize="14sp"
+			app:layout_constraintStart_toEndOf="@id/iv_team_mem_pic"
+			app:layout_constraintTop_toBottomOf="@id/tv_team_mem_dept"
+			tools:text="Coding events lead, Android app" />
+
+	</androidx.constraintlayout.widget.ConstraintLayout>
+
+</androidx.cardview.widget.CardView>
