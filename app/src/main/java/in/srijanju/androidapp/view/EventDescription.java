@@ -128,11 +128,19 @@ public class EventDescription extends SrijanActivity {
 	  @Override
 	  public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
 		if (!dataSnapshot.exists()) {
-		  register.setText(R.string.register);
-		  register.setBackground(new ColorDrawable(getResources().getColor(R.color.colorAccent)));
-		  register.setTextColor(getResources().getColor(android.R.color.white));
-		  register.setOnClickListener(regClickListener);
-		  register.setClickable(true);
+		  if (event.maxts > 0) {
+			register.setText(R.string.register);
+			register.setBackground(new ColorDrawable(getResources().getColor(R.color.colorAccent)));
+			register.setTextColor(getResources().getColor(android.R.color.white));
+			register.setOnClickListener(regClickListener);
+			register.setClickable(true);
+		  } else {
+			register.setText(R.string.reg_not_open);
+			register.setBackground(new ColorDrawable(getResources().getColor(android.R.color.darker_gray)));
+			register.setTextColor(getResources().getColor(android.R.color.black));
+			register.setOnClickListener(null);
+			register.setClickable(false);
+		  }
 		} else {
 		  register.setText(R.string.registered);
 		  register.setBackground(new ColorDrawable(getResources().getColor(android.R.color.darker_gray)));

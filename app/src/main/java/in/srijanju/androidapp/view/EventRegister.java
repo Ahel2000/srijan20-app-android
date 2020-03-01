@@ -1,6 +1,7 @@
 package in.srijanju.androidapp.view;
 
 import android.annotation.SuppressLint;
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.os.Bundle;
 import android.text.Editable;
@@ -15,6 +16,7 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import androidx.annotation.NonNull;
+import androidx.appcompat.app.AlertDialog;
 
 import com.firebase.ui.auth.AuthUI;
 import com.google.android.gms.tasks.OnFailureListener;
@@ -41,12 +43,15 @@ import in.srijanju.androidapp.model.SrijanEvent;
 
 public class EventRegister extends SrijanActivity {
 
+  final ArrayList<View> viewsAdded = new ArrayList<>();
   FirebaseUser user;
   EditText etLeadContact;
   Button btnRegister;
   DatabaseReference refReg;
   SrijanEvent event;
   Counter c;
+  TextInputLayout lTeamName;
+  EditText etTeamName;
 
   @Override
   protected void onCreate(Bundle savedInstanceState) {
@@ -99,8 +104,8 @@ public class EventRegister extends SrijanActivity {
 	etEventName.setText(event.name);
 	etEventName.setEnabled(false);
 
-	final TextInputLayout lTeamName = findViewById(R.id.in_team_name);
-	final EditText etTeamName = findViewById(R.id.et_team_name);
+	lTeamName = findViewById(R.id.in_team_name);
+	etTeamName = findViewById(R.id.et_team_name);
 
 	// If team name changes, remove the error
 	etTeamName.addTextChangedListener(new TextWatcher() {
@@ -132,7 +137,6 @@ public class EventRegister extends SrijanActivity {
 	etLeadContact = findViewById(R.id.et_team_lead_contact);
 
 	LinearLayout linearLayout = findViewById(R.id.linearlayout);
-	final ArrayList<View> viewsAdded = new ArrayList<>();
 
 	// Create "maxts" number of email fields
 	for (int i = 2; i <= event.maxts; i++) {
@@ -148,128 +152,155 @@ public class EventRegister extends SrijanActivity {
 	btnRegister.setOnClickListener(new View.OnClickListener() {
 	  @Override
 	  public void onClick(View v) {
-		btnRegister.setEnabled(false);
+		// Ask for confirmation before registering
 
-		/*
-		 * Verify team name
-		 */
-		final String teamName = etTeamName.getText().toString();
-		if (!teamName.matches("[a-zA-Z0-9]{3,16}")) {
-		  lTeamName.setError("Team name should be alphanumeric. Length should be at least 3 and no more than 16.");
+		AlertDialog.Builder builder = new AlertDialog.Builder(EventRegister.this);
+
+		final AlertDialog alertDialog = builder.setMessage("Confirm Registration?")
+				.setTitle(event.name)
+				.setCancelable(false)
+				.setIcon(R.drawable.ic_launcher)
+				.setCancelable(true)
+				.setPositiveButton("Yes, register!", new DialogInterface.OnClickListener() {
+				  @Override
+				  public void onClick(DialogInterface dialog, int which) {
+					confirmRegistration();
+				  }
+				})
+				.setNegativeButton("No", null)
+				.create();
+		alertDialog.setOnShowListener(new DialogInterface.OnShowListener() {
+		  @Override
+		  public void onShow(DialogInterface dialog) {
+			alertDialog.getButton(DialogInterface.BUTTON_NEGATIVE).setTextColor(getResources().getColor(android.R.color.holo_red_dark));
+		  }
+		});
+		alertDialog.show();
+	  }
+	});
+  }
+
+  private void confirmRegistration() {
+	btnRegister.setEnabled(false);
+
+	/*
+	 * Verify team name
+	 */
+	final String teamName = etTeamName.getText().toString();
+	if (!teamName.matches("[a-zA-Z0-9]{3,16}")) {
+	  lTeamName.setError("Team name should be alphanumeric. Length should be at least 3 and no more than 16.");
+	  btnRegister.setEnabled(true);
+	  return;
+	}
+
+	// Stores emails entered
+	final ArrayList<String> emails = new ArrayList<>();
+	emails.add(user.getEmail());
+
+	// Stores unique emails entered, to check for duplicates
+	final HashSet<String> uniqueMails = new HashSet<>();
+	uniqueMails.add(user.getEmail());
+
+	// Check email validity
+	final int[] no_of_members = {1};
+	for (int i = 0; i < event.maxts - 1; i++) {
+	  View x = viewsAdded.get(i);
+
+	  TextInputEditText EMAIL = x.findViewById(R.id.userIDTextInputEditText);
+	  String email = String.valueOf(EMAIL.getText());
+	  if (!email.equals("") && !email.matches("[A-Z0-9a-z._%+-]+@[A-Za-z0-9.-]+\\" +
+			  ".[A-Za-z]{2,64}")) {
+		Toast.makeText(EventRegister.this, "Enter valid email #" + (i + 2),
+				Toast.LENGTH_SHORT).show();
+		btnRegister.setEnabled(true);
+		return;
+	  } else {
+		if (!email.equals("")) {
+		  ++no_of_members[0];
+		  emails.add(email);
+		  uniqueMails.add(email);
+		}
+	  }
+	}
+
+	// Ensure no duplicates
+	if (emails.size() != uniqueMails.size()) {
+	  Toast.makeText(EventRegister.this, "Duplicate user", Toast.LENGTH_SHORT).show();
+	  btnRegister.setEnabled(true);
+	  return;
+	}
+
+	// Check number of emails given
+	if (no_of_members[0] < event.mints) {
+	  Toast.makeText(EventRegister.this, "Team size should be atleast " + event.mints,
+			  Toast.LENGTH_SHORT).show();
+	  btnRegister.setEnabled(true);
+	  return;
+	}
+
+	refReg = FirebaseDatabase.getInstance().getReference("srijan/events/" + event.code +
+			"/teams");
+
+	// Check if team name is taken
+	refReg.child(teamName).addListenerForSingleValueEvent(new ValueEventListener() {
+	  @Override
+	  public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
+		if (dataSnapshot.exists()) {
+		  lTeamName.setError("Team name taken.");
 		  btnRegister.setEnabled(true);
 		  return;
 		}
 
-		// Stores emails entered
-		final ArrayList<String> emails = new ArrayList<>();
-		emails.add(user.getEmail());
+		final int number = no_of_members[0];
+		final ArrayList<String> uids = new ArrayList<>();
+		c = new Counter(number, uids, emails, teamName);
 
-		// Stores unique emails entered, to check for duplicates
-		final HashSet<String> uniqueMails = new HashSet<>();
-		uniqueMails.add(user.getEmail());
-
-		// Check email validity
-		final int[] no_of_members = {1};
-		for (int i = 0; i < event.maxts - 1; i++) {
+		// Verify if all the input emails are registered
+		// If all are registered, get their uids, create and register the team
+		uids.add(user.getUid());
+		c.add();
+		for (int i = 0; i < number - 1; ++i) {
 		  View x = viewsAdded.get(i);
 
 		  TextInputEditText EMAIL = x.findViewById(R.id.userIDTextInputEditText);
-		  String email = String.valueOf(EMAIL.getText());
-		  if (!email.equals("") && !email.matches("[A-Z0-9a-z._%+-]+@[A-Za-z0-9.-]+\\" +
-				  ".[A-Za-z]{2,64}")) {
-			Toast.makeText(EventRegister.this, "Enter valid email #" + (i + 2),
-					Toast.LENGTH_SHORT).show();
-			btnRegister.setEnabled(true);
-			return;
-		  } else {
-			if (!email.equals("")) {
-			  ++no_of_members[0];
-			  emails.add(email);
-			  uniqueMails.add(email);
+		  final String email = EMAIL.getText() != null ? EMAIL.getText().toString() : "";
+
+		  final int ii = i;
+		  FirebaseDatabase.getInstance().getReference("srijan/profile").orderByChild(
+				  "parentprofile/email").equalTo(email).addListenerForSingleValueEvent(new ValueEventListener() {
+			@Override
+			public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
+			  if (!dataSnapshot.exists()) {
+				Toast.makeText(EventRegister.this, "#" + (ii + 2) + " is not " +
+						"registered for Srijan", Toast.LENGTH_SHORT).show();
+				btnRegister.setEnabled(true);
+				return;
+			  }
+			  if (dataSnapshot.getChildren().iterator().next().child("events").child(event.code).exists()) {
+				Toast.makeText(EventRegister.this, "#" + (ii + 2) + " is already registered" +
+						" for this event", Toast.LENGTH_SHORT).show();
+				btnRegister.setEnabled(true);
+				return;
+			  }
+
+			  String uid = dataSnapshot.getChildren().iterator().next().getKey();
+			  uids.add(uid);
+			  c.add();
 			}
-		  }
-		}
 
-		// Ensure no duplicates
-		if (emails.size() != uniqueMails.size()) {
-		  Toast.makeText(EventRegister.this, "Duplicate user", Toast.LENGTH_SHORT).show();
-		  btnRegister.setEnabled(true);
-		  return;
-		}
-
-		// Check number of emails given
-		if (no_of_members[0] < event.mints) {
-		  Toast.makeText(EventRegister.this, "Team size should be atleast " + event.mints,
-				  Toast.LENGTH_SHORT).show();
-		  btnRegister.setEnabled(true);
-		  return;
-		}
-
-		refReg = FirebaseDatabase.getInstance().getReference("srijan/events/" + event.code +
-				"/teams");
-
-		// Check if team name is taken
-		refReg.child(teamName).addListenerForSingleValueEvent(new ValueEventListener() {
-		  @Override
-		  public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
-			if (dataSnapshot.exists()) {
-			  lTeamName.setError("Team name taken.");
+			@Override
+			public void onCancelled(@NonNull DatabaseError databaseError) {
+			  Toast.makeText(EventRegister.this, "Some error occurred! Try again.",
+					  Toast.LENGTH_SHORT).show();
 			  btnRegister.setEnabled(true);
-			  return;
 			}
+		  });
+		}
+	  }
 
-			final int number = no_of_members[0];
-			final ArrayList<String> uids = new ArrayList<>();
-			c = new Counter(number, uids, emails, teamName);
-
-			// Verify if all the input emails are registered
-			// If all are registered, get their uids, create and register the team
-			uids.add(user.getUid());
-			c.add();
-			for (int i = 0; i < number - 1; ++i) {
-			  View x = viewsAdded.get(i);
-
-			  TextInputEditText EMAIL = x.findViewById(R.id.userIDTextInputEditText);
-			  final String email = EMAIL.getText() != null ? EMAIL.getText().toString() : "";
-
-			  final int ii = i;
-			  FirebaseDatabase.getInstance().getReference("srijan/profile").orderByChild(
-					  "parentprofile/email").equalTo(email).addListenerForSingleValueEvent(new ValueEventListener() {
-				@Override
-				public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
-				  if (!dataSnapshot.exists()) {
-					Toast.makeText(EventRegister.this, "#" + (ii + 2) + " is not " +
-							"registered for Srijan", Toast.LENGTH_SHORT).show();
-					btnRegister.setEnabled(true);
-					return;
-				  }
-				  if (dataSnapshot.getChildren().iterator().next().child("events").child(event.code).exists()) {
-					Toast.makeText(EventRegister.this, "#" + (ii + 2) + " is already registered" +
-							" for this event", Toast.LENGTH_SHORT).show();
-					btnRegister.setEnabled(true);
-					return;
-				  }
-
-				  String uid = dataSnapshot.getChildren().iterator().next().getKey();
-				  uids.add(uid);
-				  c.add();
-				}
-
-				@Override
-				public void onCancelled(@NonNull DatabaseError databaseError) {
-				  Toast.makeText(EventRegister.this, "Some error occurred! Try again.",
-						  Toast.LENGTH_SHORT).show();
-				  btnRegister.setEnabled(true);
-				}
-			  });
-			}
-		  }
-
-		  @Override
-		  public void onCancelled(@NonNull DatabaseError databaseError) {
-			btnRegister.setEnabled(true);
-		  }
-		});
+	  @Override
+	  public void onCancelled(@NonNull DatabaseError databaseError) {
+		btnRegister.setEnabled(true);
 	  }
 	});
   }
