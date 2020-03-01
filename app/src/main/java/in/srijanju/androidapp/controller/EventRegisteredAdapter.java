@@ -10,6 +10,7 @@ import android.view.animation.TranslateAnimation;
 import android.widget.BaseAdapter;
 import android.widget.TextView;
 
+import androidx.core.text.HtmlCompat;
 import androidx.core.util.Pair;
 
 import java.util.ArrayList;
@@ -19,9 +20,10 @@ import in.srijanju.androidapp.R;
 public class EventRegisteredAdapter extends BaseAdapter {
 
   private Activity context;
-  private ArrayList<Pair<String, String>> events;
+  private ArrayList<Pair<String, Pair<String, String>>> events;
 
-  public EventRegisteredAdapter(Activity context, ArrayList<Pair<String, String>> list) {
+  public EventRegisteredAdapter(Activity context,
+								ArrayList<Pair<String, Pair<String, String>>> list) {
 	this.context = context;
 	events = list;
   }
@@ -53,7 +55,7 @@ public class EventRegisteredAdapter extends BaseAdapter {
 	  Animation animT = new TranslateAnimation(position % 2 == 0 ? -100 : 100, 0f, 0f, 0f);
 
 	  set.addAnimation(animT);
-	  set.setDuration(250);
+	  set.setDuration(350);
 
 	  v.startAnimation(set);
 	} else {
@@ -62,8 +64,14 @@ public class EventRegisteredAdapter extends BaseAdapter {
 	TextView eventName = v.findViewById(R.id.tv_event_name);
 	TextView teamName = v.findViewById(R.id.tv_team);
 
-	eventName.setText(events.get(position).first);
-	teamName.setText(String.format("Team: %s", events.get(position).second));
+	Pair<String, String> eventDet = events.get(position).second;
+	if (eventDet == null) {
+	  return v;
+	}
+	eventName.setText(String.valueOf(eventDet.first));
+	String sourceString = String.format("Team: <span style=\"color: black;\"><em>%s</em></span>",
+			eventDet.second);
+	teamName.setText(HtmlCompat.fromHtml(sourceString, HtmlCompat.FROM_HTML_MODE_LEGACY));
 
 	return v;
   }
