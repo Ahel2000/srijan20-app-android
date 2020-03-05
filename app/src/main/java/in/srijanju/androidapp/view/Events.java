@@ -116,6 +116,14 @@ public class Events extends Fragment {
 	});
 	gridView.setAdapter(adapter);
 
+	getView().findViewById(R.id.tv_schedule).setOnClickListener(new View.OnClickListener() {
+	  @Override
+	  public void onClick(View v) {
+		Intent browserIntent = new Intent(Intent.ACTION_VIEW, Uri.parse("https://drive.google.com/open?id=1rfMozwquwSvcP7b7OT-jeczepu-zura5"));
+		startActivity(browserIntent);
+	  }
+	});
+
 	getView().findViewById(R.id.tv_mementos).setOnClickListener(new View.OnClickListener() {
 	  @Override
 	  public void onClick(View v) {

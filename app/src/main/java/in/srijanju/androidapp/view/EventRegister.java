@@ -7,11 +7,14 @@ import android.os.Bundle;
 import android.text.Editable;
 import android.text.TextWatcher;
 import android.util.Patterns;
+import android.view.Gravity;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.LinearLayout;
+import android.widget.ProgressBar;
+import android.widget.ScrollView;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -52,6 +55,40 @@ public class EventRegister extends SrijanActivity {
   Counter c;
   TextInputLayout lTeamName;
   EditText etTeamName;
+  ScrollView svRegister;
+  ProgressBar progressBar;
+
+  ValueEventListener registeredListener = new ValueEventListener() {
+	@Override
+	public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
+	  if (dataSnapshot.exists()) {
+		svRegister.setVisibility(View.INVISIBLE);
+		progressBar.setVisibility(View.VISIBLE);
+		Toast toast =
+				Toast.makeText(EventRegister.this, "Already registered", Toast.LENGTH_LONG);
+		toast.setGravity(Gravity.CENTER, 0, 0);
+		toast.show();
+		new Thread(new Runnable() {
+		  @Override
+		  public void run() {
+			try {
+			  Thread.sleep(1000);
+			} catch (InterruptedException e) {
+			  e.printStackTrace();
+			}
+			finish();
+		  }
+		}).start();
+	  } else {
+		svRegister.setVisibility(View.VISIBLE);
+		progressBar.setVisibility(View.INVISIBLE);
+	  }
+	}
+
+	@Override
+	public void onCancelled(@NonNull DatabaseError databaseError) {
+	}
+  };
 
   @Override
   protected void onCreate(Bundle savedInstanceState) {
@@ -94,12 +131,14 @@ public class EventRegister extends SrijanActivity {
 	}
 
 	if (event.maxts == 0) {
-	  Toast.makeText(EventRegister.this, "Registration not yet started",
+	  Toast.makeText(EventRegister.this, "Registration not open",
 			  Toast.LENGTH_SHORT).show();
 	  finish();
 	  return;
 	}
 
+	svRegister = findViewById(R.id.sv_register);
+	progressBar = findViewById(R.id.progress);
 	EditText etEventName = findViewById(R.id.et_event_name);
 	etEventName.setText(event.name);
 	etEventName.setEnabled(false);
@@ -193,15 +232,15 @@ public class EventRegister extends SrijanActivity {
 	  return;
 	}
 
-	// Stores emails entered
+// Stores emails entered
 	final ArrayList<String> emails = new ArrayList<>();
 	emails.add(user.getEmail());
 
-	// Stores unique emails entered, to check for duplicates
+// Stores unique emails entered, to check for duplicates
 	final HashSet<String> uniqueMails = new HashSet<>();
 	uniqueMails.add(user.getEmail());
 
-	// Check email validity
+// Check email validity
 	final int[] no_of_members = {1};
 	for (int i = 0; i < event.maxts - 1; i++) {
 	  View x = viewsAdded.get(i);
@@ -354,6 +393,18 @@ public class EventRegister extends SrijanActivity {
 	Toast.makeText(EventRegister.this, "Something went wrong! Report to srijanjdvu.ac@gmail" +
 			".com for any queries", Toast.LENGTH_LONG).show();
 	btnRegister.setEnabled(true);
+  }
+
+  @Override
+  protected void onResume() {
+	super.onResume();
+	FirebaseDatabase.getInstance().getReference("srijan/profile/" + user.getUid() + "/events/" + event.code).addValueEventListener(registeredListener);
+  }
+
+  @Override
+  protected void onPause() {
+	super.onPause();
+	FirebaseDatabase.getInstance().getReference("srijan/profile/" + user.getUid() + "/events/" + event.code).removeEventListener(registeredListener);
   }
 
   private class Counter {
