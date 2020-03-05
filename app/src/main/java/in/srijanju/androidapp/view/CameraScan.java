@@ -212,6 +212,7 @@ public class CameraScan extends AppCompatActivity implements ZXingScannerView.Re
 		if (event.maxts == 0) {
 		  Toast.makeText(CameraScan.this, "Registration not yet started",
 				  Toast.LENGTH_SHORT).show();
+		  finish();
 		  return;
 		}
 
@@ -226,6 +227,7 @@ public class CameraScan extends AppCompatActivity implements ZXingScannerView.Re
 	  @Override
 	  public void onCancelled(@NonNull DatabaseError databaseError) {
 		Toast.makeText(CameraScan.this, "Didn't work", Toast.LENGTH_SHORT).show();
+		resumeCameraPreview();
 	  }
 	});
   }
